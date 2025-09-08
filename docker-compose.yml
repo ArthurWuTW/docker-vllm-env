@@ -1,0 +1,15 @@
+version: "2.1"
+services:
+
+  vllm-env:
+    build:
+      context: ./image
+      args:
+        HOSTUSER: ${HOSTUSER}
+        HOSTUID: ${HOSTUID}
+        HOSTGID: ${HOSTGID}
+    user: ${HOSTUSER}:${HOSTUSER}
+    runtime: nvidia
+    command: tail -f /dev/null
+    ports:
+      - 8888:8888
