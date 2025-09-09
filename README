@@ -1,0 +1,4 @@
+vi .env
+==== .env ===
+TOKEN=<your_hugging_face_token>
+=============

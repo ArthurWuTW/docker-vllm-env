@@ -4,12 +4,12 @@ services:
   vllm-env:
     build:
       context: ./image
-      args:
-        HOSTUSER: ${HOSTUSER}
-        HOSTUID: ${HOSTUID}
-        HOSTGID: ${HOSTGID}
-    user: ${HOSTUSER}:${HOSTUSER}
     runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - HF_TOKEN=${TOKEN}
+    volumes:
+      - ./cache:/root/.cache:rw
     command: tail -f /dev/null
     ports:
-      - 8888:8888
+      - "8000:8000"
