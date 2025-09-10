@@ -1,5 +1,7 @@
 FROM nvidia/cuda:12.6.3-cudnn-devel-rockylinux9
 
+ARG HF_TOKEN
+
 RUN yum install -y ncurses git
 RUN yum install -y python3.12 python3.12-pip python3.12-devel
 RUN yum install -y libnccl libnccl-devel libnccl-static
@@ -19,6 +21,6 @@ RUN sed -i 's/^#PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config \
 
 RUN echo 'LD_LIBRARY_PATH=/usr/local/lib/python3.12/site-packages/cusparselt/lib:${LD_LIBRARY_PATH}' >> /etc/environment
 RUN echo 'NVIDIA_VISIBLE_DEVICES=all' >> /etc/environment
-RUN echo 'HF_TOKEN=${HF_TOKEN}' >> /etc/environment
+RUN echo "HF_TOKEN=${HF_TOKEN}" >> /etc/environment
 
 CMD ["/usr/sbin/sshd", "-D"]
