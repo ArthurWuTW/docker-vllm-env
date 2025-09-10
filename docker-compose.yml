@@ -12,7 +12,8 @@ services:
       - ./cache:/root/.cache:rw
     ports:
       - "8000:8000"
-    command: tail -f /dev/null
+      - "222:22"
+    #command: tail -f /dev/null
     #entrypoint: >
     #python3.12 -m vllm.entrypoints.openai.api_server --model openai/gpt-oss-20b --gpu-memory-utilization 0.9 --max-model-len 1024 --max-num-seqs 1 --port 8000
 
