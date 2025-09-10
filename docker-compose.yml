@@ -4,6 +4,8 @@ services:
   vllm-env:
     build:
       context: ./image
+      args:
+        HF_TOKEN: ${TOKEN}
     runtime: nvidia
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
