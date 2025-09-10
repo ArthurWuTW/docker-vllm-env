@@ -6,6 +6,7 @@ services:
       context: ./image
       args:
         HF_TOKEN: ${TOKEN}
+        VSCODE_COMMIT_ID: ${VSCODE_COMMIT_ID}
     runtime: nvidia
     environment:
       - NVIDIA_VISIBLE_DEVICES=all

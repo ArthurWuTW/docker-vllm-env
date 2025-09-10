@@ -1,4 +1,5 @@
 vi .env
 ==== .env ===
 TOKEN=<your_hugging_face_token>
+VSCODE_COMMIT_ID=<vscode commit id for vscode server>
 =============
