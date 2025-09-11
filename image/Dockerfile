@@ -5,7 +5,7 @@ ARG VSCODE_COMMIT_ID
 
 #vscode server
 RUN yum install -y procps-ng tar gzip curl --allowerasing
-
+RUN yum install -y gcc gcc-c++ make cmake
 RUN yum install -y ncurses git
 RUN yum install -y python3.12 python3.12-pip python3.12-devel
 RUN yum install -y libnccl libnccl-devel libnccl-static
