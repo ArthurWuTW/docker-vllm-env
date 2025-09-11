@@ -32,4 +32,8 @@ RUN mkdir -p /root/.vscode-server/bin/${VSCODE_COMMIT_ID}
 RUN curl -L https://update.code.visualstudio.com/commit:${VSCODE_COMMIT_ID}/server-linux-x64/stable \
     | tar --strip-components=1 -xz -C /root/.vscode-server/bin/${VSCODE_COMMIT_ID}
 
+# vllm project
+RUN git clone https://github.com/vllm-project/vllm
+
+
 CMD ["/usr/sbin/sshd", "-D"]
