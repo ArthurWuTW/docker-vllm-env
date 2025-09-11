@@ -8,6 +8,7 @@ services:
         HF_TOKEN: ${TOKEN}
         VSCODE_COMMIT_ID: ${VSCODE_COMMIT_ID}
     runtime: nvidia
+    cpuset: "0-10"
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - HF_TOKEN=${TOKEN}
