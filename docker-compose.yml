@@ -9,8 +9,6 @@ services:
         VSCODE_COMMIT_ID: ${VSCODE_COMMIT_ID}
     runtime: nvidia
     cpuset: "0-10"
-    mem_limit: 20g
-    memswap_limit: 40g
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - HF_TOKEN=${TOKEN}
