@@ -9,9 +9,9 @@ services:
         VSCODE_COMMIT_ID: ${VSCODE_COMMIT_ID}
     runtime: nvidia
     cpuset: "0-10"
+    ipc: host
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
-      - HF_TOKEN=${TOKEN}
     volumes:
       - ./cache:/root/.cache:rw
     ports:

@@ -1,41 +1,33 @@
-FROM nvidia/cuda:12.6.3-cudnn-devel-rockylinux9
+FROM nvcr.io/nvidia/pytorch:23.10-py3
 
-ARG HF_TOKEN
+ENV DEBIAN_FRONTEND=noninteractive
+
 ARG VSCODE_COMMIT_ID
+ARG HF_TOKEN
 
-#vscode server
-RUN yum install -y procps-ng tar gzip curl --allowerasing
-RUN yum install -y gcc gcc-c++ make cmake
-RUN yum install -y ncurses git
-RUN yum install -y python3.12 python3.12-pip python3.12-devel
-RUN yum install -y libnccl libnccl-devel libnccl-static
-RUN yum install -y epel-release
-RUN yum install -y ccache
-
-RUN pip3.12 install uv
-RUN uv pip install --python 3.12 vllm --torch-backend=auto --system
-ENV LD_LIBRARY_PATH=/usr/lib64:/usr/local/lib/python3.12/site-packages/cusparselt/lib:${LD_LIBRARY_PATH}
+# 基本工具
+RUN apt-get update -y && apt-get install -y \
+    procps tar gzip curl \
+    ccache \
+    openssh-server
 
 
-RUN dnf install -y openssh-server passwd && dnf clean all
-
-RUN echo "root:root123" | chpasswd
-RUN mkdir /var/run/sshd && ssh-keygen -A
-RUN sed -i 's/^#PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config \
+# SSH 設定
+RUN echo "root:root123" | chpasswd && mkdir -p /var/run/sshd && ssh-keygen -A \
+    && sed -i 's/^#PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config \
     && sed -i 's/^#PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config \
-    && sed -i 's/^#PermitUserEnvironment no/PermitUserEnvironment yes/' /etc/ssh/sshd_config
+    && sed -i 's/^#PermitUserEnvironment.*/PermitUserEnvironment yes/' /etc/ssh/sshd_config
 
-RUN echo 'LD_LIBRARY_PATH=/usr/lib64:/usr/local/lib/python3.12/site-packages/cusparselt/lib:${LD_LIBRARY_PATH}' >> /etc/environment
-RUN echo 'NVIDIA_VISIBLE_DEVICES=all' >> /etc/environment
-RUN echo "HF_TOKEN=${HF_TOKEN}" >> /etc/environment
 
-# vscode server
-RUN mkdir -p /root/.vscode-server/bin/${VSCODE_COMMIT_ID}
-RUN curl -L https://update.code.visualstudio.com/commit:${VSCODE_COMMIT_ID}/server-linux-x64/stable \
+# 安裝 VSCode server
+RUN mkdir -p /root/.vscode-server/bin/${VSCODE_COMMIT_ID} && \
+    curl -L https://update.code.visualstudio.com/commit:${VSCODE_COMMIT_ID}/server-linux-x64/stable \
     | tar --strip-components=1 -xz -C /root/.vscode-server/bin/${VSCODE_COMMIT_ID}
 
-# vllm project
-RUN git clone https://github.com/vllm-project/vllm
-RUN pip3.12 install setuptools_scm
+# clone vLLM
+RUN git clone https://github.com/vllm-project/vllm 
+
+# TOKEN Config
+echo "export HF_TOKEN=${HF_TOKEN}" >> /etc/bash.bashrc
 
 CMD ["/usr/sbin/sshd", "-D"]
