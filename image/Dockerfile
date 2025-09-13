@@ -28,6 +28,6 @@ RUN mkdir -p /root/.vscode-server/bin/${VSCODE_COMMIT_ID} && \
 RUN git clone https://github.com/vllm-project/vllm 
 
 # TOKEN Config
-echo "export HF_TOKEN=${HF_TOKEN}" >> /etc/bash.bashrc
+RUN echo "export HF_TOKEN=${HF_TOKEN}" >> /etc/bash.bashrc
 
 CMD ["/usr/sbin/sshd", "-D"]
