@@ -14,7 +14,7 @@ RUN yum install -y ccache
 
 RUN pip3.12 install uv
 RUN uv pip install --python 3.12 vllm --torch-backend=auto --system
-ENV LD_LIBRARY_PATH=/usr/lib64:/usr/local/lib/python3.12/site-packages/cusparselt/lib:${LD_LIBRARY_PATH}
+ENV LD_LIBRARY_PATH=/usr/local/lib/python3.12/site-packages/nvidia/cusparselt/lib:usr/lib64:/usr/local/lib/python3.12/site-packages/cusparselt/lib:${LD_LIBRARY_PATH}
 
 
 RUN dnf install -y openssh-server passwd && dnf clean all
@@ -25,7 +25,7 @@ RUN sed -i 's/^#PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config \
     && sed -i 's/^#PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config \
     && sed -i 's/^#PermitUserEnvironment no/PermitUserEnvironment yes/' /etc/ssh/sshd_config
 
-RUN echo 'LD_LIBRARY_PATH=/usr/lib64:/usr/local/lib/python3.12/site-packages/cusparselt/lib:${LD_LIBRARY_PATH}' >> /etc/environment
+RUN echo 'LD_LIBRARY_PATH=/usr/local/lib/python3.12/site-packages/nvidia/cusparselt/lib:/usr/lib64:/usr/local/lib/python3.12/site-packages/cusparselt/lib:${LD_LIBRARY_PATH}' >> /etc/environment
 RUN echo 'NVIDIA_VISIBLE_DEVICES=all' >> /etc/environment
 RUN echo "HF_TOKEN=${HF_TOKEN}" >> /etc/environment
 
@@ -37,5 +37,8 @@ RUN curl -L https://update.code.visualstudio.com/commit:${VSCODE_COMMIT_ID}/serv
 # vllm project
 RUN git clone https://github.com/vllm-project/vllm
 RUN pip3.12 install setuptools_scm
+
+# Build python only
+RUN cd /vllm && VLLM_USE_PRECOMPILED=1 uv pip install --python 3.12 --editable . --system -v
 
 CMD ["/usr/sbin/sshd", "-D"]
