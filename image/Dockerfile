@@ -12,6 +12,9 @@ RUN yum install -y libnccl libnccl-devel libnccl-static
 RUN yum install -y epel-release
 RUN yum install -y ccache
 
+# llama.cpp
+RUN yum install -y cmake libcurl-devel gdb
+
 RUN pip3.12 install uv
 RUN uv pip install --python 3.12 vllm --torch-backend=auto --system
 ENV LD_LIBRARY_PATH=/usr/local/lib/python3.12/site-packages/nvidia/cusparselt/lib:usr/lib64:/usr/local/lib/python3.12/site-packages/cusparselt/lib:${LD_LIBRARY_PATH}
