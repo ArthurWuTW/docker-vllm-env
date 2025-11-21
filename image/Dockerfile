@@ -44,4 +44,7 @@ RUN pip3.12 install setuptools_scm
 # Build python only
 RUN cd /vllm && VLLM_USE_PRECOMPILED=1 uv pip install --python 3.12 --editable . --system -v
 
+# llama.cpp project
+RUN git clone https://github.com/ArthurWuTW/llama.cpp
+
 CMD ["/usr/sbin/sshd", "-D"]
