@@ -14,6 +14,7 @@ RUN yum install -y ccache
 
 # llama.cpp
 RUN yum install -y cmake libcurl-devel gdb
+RUN yum install -y cuda-nsight-systems-12-1
 
 RUN pip3.12 install uv
 RUN uv pip install --python 3.12 vllm --torch-backend=auto --system
